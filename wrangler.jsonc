@@ -11,7 +11,8 @@
     "binding": "ASSETS",
     "run_worker_first": true
   },
-  // Deploy weigeren zolang deze secrets niet gezet zijn.
+  // Lokaal waarschuwt wrangler dev als een van deze ontbreekt. Online blokkeert dit de deploy niet,
+  // maar dan geeft de Worker zelf 503 op alles (dicht, niet open).
   "secrets": {
     "required": ["AUTH_USER", "AUTH_PASS", "TRIPLY_TOKEN"]
   }

@@ -1,0 +1,11 @@
+{
+  "name": "rijkscollectie-elastic-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python server.py",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "python consistentietest.py"
+  }
+}

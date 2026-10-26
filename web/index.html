@@ -49,7 +49,7 @@
       </section>
     </div>
     <details class="technical"><summary>Toon Elasticsearch-query</summary>
-      <h2>JSON</h2><p>De request die naar de Elasticsearch-service is gestuurd (via de lokale proxy, die het TriplyDB-token toevoegt). Labels voor materialen, genres, makers en de afbeeldingen worden in een tweede request opgehaald met een <code>ids</code>-query.</p>
+      <h2>JSON</h2><p>De request die naar de Elasticsearch-service is gestuurd (via <code>/api/search</code>: online de Cloudflare Worker, lokaal <code>server.py</code>; die voegt het TriplyDB-token toe). Labels voor materialen, genres, makers en de afbeeldingen worden in een tweede request opgehaald met een <code>ids</code>-query.</p>
       <pre id="query-json">Er is nog geen zoekactie uitgevoerd.</pre>
       <h2>Weging in de JSON</h2><p>In <code>query_string.fields</code> staat achter de titel en de objectnaam <code>^3</code>: een treffer daarin telt 3× zo zwaar als een treffer in de beschrijving. Werken met een afbeelding krijgen een kleine extra score (<code>should</code> met <code>exists</code>), zodat ze bij gelijke relevantie eerst komen. Facetten (<code>aggs</code>) en filters (<code>post_filter</code>) gebruiken geen score.</p>
     </details>

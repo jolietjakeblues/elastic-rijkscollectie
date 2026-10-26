@@ -1,0 +1,5 @@
+# Kopieer naar .dev.vars voor wrangler dev (.dev.vars staat in .gitignore).
+# Online zet je deze waarden met: wrangler secret put <NAAM>
+AUTH_USER=demo
+AUTH_PASS=kies-een-lang-wachtwoord
+TRIPLY_TOKEN=plak-hier-een-TriplyDB-token-met-leesrechten

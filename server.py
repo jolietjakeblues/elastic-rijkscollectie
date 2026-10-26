@@ -7,6 +7,8 @@ Het TriplyDB-token blijft hier aan de serverkant; de browser ziet het nooit.
 """
 import argparse
 import json
+import os
+import re
 import urllib.error
 import urllib.request
 from functools import partial
@@ -18,6 +20,16 @@ from consistentietest import get_token
 ES_URL = "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/rijkscollectie-rce/services/rijkscollectie-rce-elastic/_search"
 WEB = Path(__file__).parent / "web"
 MAX_BODY = 64 * 1024
+
+
+def read_security_headers():
+    """Dezelfde headers als online: gelezen uit SECURITY_HEADERS in src/worker.js, zodat CSP-fouten ook lokaal zichtbaar zijn."""
+    src = (Path(__file__).parent / "src" / "worker.js").read_text(encoding="utf-8")
+    block = re.search(r"const SECURITY_HEADERS = \{(.*?)\n\};", src, re.S).group(1)
+    return dict(re.findall(r"""^\s*'([\w-]+)':\s*["'](.*)["'],\s*$""", block, re.M))
+
+
+SECURITY_HEADERS = read_security_headers()
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -54,7 +66,8 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(data)
 
     def end_headers(self):
-        self.send_header("Cache-Control", "no-store")
+        for k, v in SECURITY_HEADERS.items():
+            self.send_header(k, v)
         super().end_headers()
 
     def log_message(self, fmt, *args):
@@ -64,7 +77,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--port", type=int, default=int(os.environ.get("PORT") or 8765))
     a = ap.parse_args()
     Handler.token = get_token()
     if not Handler.token:
