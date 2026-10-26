@@ -1,0 +1,788 @@
+{
+ "meta": {
+  "dataset": "rce/rijkscollectie-rce",
+  "service": "rijkscollectie-rce-elastic",
+  "tijd": "2026-10-15T17:08:41",
+  "steekproef": 100,
+  "seed": 42,
+  "aanroepen": {
+   "es": 44,
+   "sparql": 117
+  },
+  "seconden": {
+   "es": 4.4,
+   "sparql": 13.1
+  }
+ },
+ "resultaten": {
+  "totalen": {
+   "elastic_docs": 603467,
+   "sparql_subjecten": 603467,
+   "verschil": 0,
+   "elastic_docs_zonder_type": 0,
+   "per_type": [
+    {
+     "type": "https://schema.org/QuantitativeValue",
+     "sparql": 271864,
+     "elastic": 271864
+    },
+    {
+     "type": "https://schema.org/CreativeWork",
+     "sparql": 133000,
+     "elastic": 133000
+    },
+    {
+     "type": "https://schema.org/PropertyValue",
+     "sparql": 132989,
+     "elastic": 132989
+    },
+    {
+     "type": "https://schema.org/MediaObject",
+     "sparql": 42753,
+     "elastic": 42753
+    },
+    {
+     "type": "https://schema.org/Person",
+     "sparql": 17537,
+     "elastic": 17537
+    },
+    {
+     "type": "https://schema.org/DefinedTerm",
+     "sparql": 5324,
+     "elastic": 5324
+    },
+    {
+     "type": "https://schema.org/Place",
+     "sparql": 2512,
+     "elastic": 2512
+    },
+    {
+     "type": "https://schema.org/Product",
+     "sparql": 1687,
+     "elastic": 1687
+    },
+    {
+     "type": "https://schema.org/Occupation",
+     "sparql": 68,
+     "elastic": 68
+    }
+   ],
+   "ok": true
+  },
+  "velddekking": {
+   "velden": [
+    {
+     "predicaat": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+     "sparql": 603467,
+     "elastic": 603467,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/value",
+     "sparql": 404633,
+     "elastic": 404633,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/valueReference",
+     "sparql": 271864,
+     "elastic": 271864,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/unitText",
+     "sparql": 271717,
+     "elastic": 271717,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/description",
+     "sparql": 260454,
+     "elastic": 260454,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/name",
+     "sparql": 153347,
+     "elastic": 153347,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/creator",
+     "sparql": 133000,
+     "elastic": 133000,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/isPartOf",
+     "sparql": 133000,
+     "elastic": 133000,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/identifier",
+     "sparql": 132989,
+     "elastic": 132989,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/url",
+     "sparql": 132989,
+     "elastic": 132989,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/propertyID",
+     "sparql": 132989,
+     "elastic": 132989,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/sdPublisher",
+     "sparql": 132318,
+     "elastic": 132318,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/genre",
+     "sparql": 130264,
+     "elastic": 130264,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/license",
+     "sparql": 129886,
+     "elastic": 129886,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/material",
+     "sparql": 129471,
+     "elastic": 129471,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/alternateName",
+     "sparql": 128805,
+     "elastic": 128805,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/temporal",
+     "sparql": 120961,
+     "elastic": 120961,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/additionalType",
+     "sparql": 119887,
+     "elastic": 119887,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/size",
+     "sparql": 118398,
+     "elastic": 118398,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/contentUrl",
+     "sparql": 42753,
+     "elastic": 42753,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/encodesCreativeWork",
+     "sparql": 42753,
+     "elastic": 42753,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/thumbnailUrl",
+     "sparql": 42753,
+     "elastic": 42753,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/locationCreated",
+     "sparql": 37069,
+     "elastic": 37069,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/associatedMedia",
+     "sparql": 30881,
+     "elastic": 30881,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/hasOccupation",
+     "sparql": 8258,
+     "elastic": 8258,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/birthDate",
+     "sparql": 8076,
+     "elastic": 8076,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/birthPlace",
+     "sparql": 7585,
+     "elastic": 7585,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/sameAs",
+     "sparql": 6746,
+     "elastic": 6746,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/copyrightHolder",
+     "sparql": 6318,
+     "elastic": 6318,
+     "verschil": 0
+    },
+    {
+     "predicaat": "https://schema.org/deathDate",
+     "sparql": 4487,
+     "elastic": 4487,
+     "verschil": 0
+    }
+   ],
+   "ok": true
+  },
+  "es_naar_sparql": {
+   "gecontroleerd": 100,
+   "identiek": 100,
+   "problemen": [],
+   "ok": true
+  },
+  "sparql_naar_es": {
+   "gecontroleerd": 100,
+   "gevonden": 100,
+   "ontbrekend": [],
+   "ok": true
+  },
+  "facetten": {
+   "facetten": [
+    {
+     "predicaat": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+     "termen": [
+      {
+       "waarde": "https://schema.org/QuantitativeValue",
+       "sparql": 271864,
+       "elastic": 271864
+      },
+      {
+       "waarde": "https://schema.org/CreativeWork",
+       "sparql": 133000,
+       "elastic": 133000
+      },
+      {
+       "waarde": "https://schema.org/PropertyValue",
+       "sparql": 132989,
+       "elastic": 132989
+      },
+      {
+       "waarde": "https://schema.org/MediaObject",
+       "sparql": 42753,
+       "elastic": 42753
+      },
+      {
+       "waarde": "https://schema.org/Person",
+       "sparql": 17537,
+       "elastic": 17537
+      },
+      {
+       "waarde": "https://schema.org/DefinedTerm",
+       "sparql": 5324,
+       "elastic": 5324
+      },
+      {
+       "waarde": "https://schema.org/Place",
+       "sparql": 2512,
+       "elastic": 2512
+      },
+      {
+       "waarde": "https://schema.org/Product",
+       "sparql": 1687,
+       "elastic": 1687
+      },
+      {
+       "waarde": "https://schema.org/Occupation",
+       "sparql": 68,
+       "elastic": 68
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/additionalType",
+     "termen": [
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/0c04bb91-3f1e-3673-a816-f8be8900efc9",
+       "sparql": 62773,
+       "elastic": 62773
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/1070f453-16a8-3308-9f30-661aae6e6094",
+       "sparql": 18677,
+       "elastic": 18677
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/ca28fc39-0752-3ee8-a746-4715b566e897",
+       "sparql": 16511,
+       "elastic": 16511
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/635df502-5639-3c5f-8717-fa473573b9ce",
+       "sparql": 13256,
+       "elastic": 13256
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/38b0a576-e749-30d4-8b49-ab66072cd5c1",
+       "sparql": 12863,
+       "elastic": 12863
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/8dfbeb42-5e2a-307e-9cde-72654f8ea0cc",
+       "sparql": 7249,
+       "elastic": 7249
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/ac371720-d8e4-342a-83b9-1902973bdda3",
+       "sparql": 5568,
+       "elastic": 5568
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/9ff9f4a9-c64a-351b-96a9-3a591006bbf6",
+       "sparql": 5426,
+       "elastic": 5426
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/1e55adbd-3a80-3f54-9070-77ad1d48b9d9",
+       "sparql": 3224,
+       "elastic": 3224
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/f47d2668-2a55-38da-81dd-15bfbeadee6b",
+       "sparql": 3144,
+       "elastic": 3144
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/892daa2c-4868-33a9-ac48-d13bb6fb81d0",
+       "sparql": 3102,
+       "elastic": 3102
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/e790120e-fefd-3241-93c8-5382ca8e439c",
+       "sparql": 2471,
+       "elastic": 2471
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/bccca8ed-55a5-3bab-8207-856ce67dd56c",
+       "sparql": 2303,
+       "elastic": 2303
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/8543d0fb-fa04-3783-ad38-d32590e74a25",
+       "sparql": 2230,
+       "elastic": 2230
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/67e3ea96-b9dc-3b25-aaca-85a7c3369355",
+       "sparql": 2111,
+       "elastic": 2111
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/genre",
+     "termen": [
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/1e4770f8-cc21-34ee-8965-b1a6a00efa96",
+       "sparql": 58808,
+       "elastic": 58808
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/426290cf-d008-30a2-8de2-913640939e12",
+       "sparql": 44383,
+       "elastic": 44383
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/628fd943-c60e-3986-ab11-4fbe437ac35a",
+       "sparql": 18219,
+       "elastic": 18219
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/66ff153f-25c8-3f1b-a228-d6790b700ca2",
+       "sparql": 7855,
+       "elastic": 7855
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/635df502-5639-3c5f-8717-fa473573b9ce",
+       "sparql": 534,
+       "elastic": 534
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/d9871f46-d9f4-3b48-a859-ea1148a567ae",
+       "sparql": 215,
+       "elastic": 215
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/be2a5666-3969-3afb-94fd-15e8a52fbff8",
+       "sparql": 139,
+       "elastic": 139
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/348ff0d1-48c5-30ea-b45a-845fb13d38e8",
+       "sparql": 91,
+       "elastic": 91
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/9ff9f4a9-c64a-351b-96a9-3a591006bbf6",
+       "sparql": 32,
+       "elastic": 32
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/0c99debc-56f6-36f1-a94e-46304b511071",
+       "sparql": 22,
+       "elastic": 22
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/069acabc-6a59-33f5-a036-43ee4b6d0610",
+       "sparql": 5,
+       "elastic": 5
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/2982d723-3131-323d-b0bc-b8b9ac9d2598",
+       "sparql": 4,
+       "elastic": 4
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/23accaff-f9cd-39fc-9cc5-ad7fdb7d0a3d",
+       "sparql": 4,
+       "elastic": 4
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/7b2a4e44-c4e3-3928-a252-e4193643a423",
+       "sparql": 3,
+       "elastic": 3
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/d9303016-03ae-3b1b-b9b2-e5adbb7c8f86",
+       "sparql": 3,
+       "elastic": 3
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/7fcbc106-29df-3593-9012-123ed0f7825d",
+       "sparql": 3,
+       "elastic": 3
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/material",
+     "termen": [
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/bc1f81fc-f237-328f-81f9-934dfd03c198",
+       "sparql": 63325,
+       "elastic": 63325
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/404f5908-602d-348d-b20b-de555eea83a3",
+       "sparql": 23514,
+       "elastic": 23514
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/7cd4f9dd-746a-38d9-a4e1-3a36d528fe4c",
+       "sparql": 12184,
+       "elastic": 12184
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/04ccdd0f-42ab-397b-97cc-70d770a4e757",
+       "sparql": 10444,
+       "elastic": 10444
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/957aae59-3df0-3528-a873-851f8e098512",
+       "sparql": 9330,
+       "elastic": 9330
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/ccfc226b-9cc1-35b1-881b-2c7b8efb3fa7",
+       "sparql": 9177,
+       "elastic": 9177
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/3ce11a17-56c4-3051-b77c-7addb60631b6",
+       "sparql": 8492,
+       "elastic": 8492
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/a67966ae-bdab-3fa6-ba50-5236ab0edeed",
+       "sparql": 6067,
+       "elastic": 6067
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/7890d4af-c592-3a85-a96c-62b170760729",
+       "sparql": 5405,
+       "elastic": 5405
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/5c5e62eb-28a1-3e84-af15-692ec1f9d569",
+       "sparql": 5398,
+       "elastic": 5398
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/01970186-d778-3ae1-9781-413270c94321",
+       "sparql": 4690,
+       "elastic": 4690
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/89c39b3a-32ab-3515-886f-34e087990f52",
+       "sparql": 4299,
+       "elastic": 4299
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/74ce19ed-3041-3ed9-99e5-c4bbb8aecdbf",
+       "sparql": 3412,
+       "elastic": 3412
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/ccec524f-f715-317e-91fb-831010a2b91f",
+       "sparql": 3029,
+       "elastic": 3029
+      },
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/402a06b0-f708-31e7-ad12-3508d12b8d14",
+       "sparql": 2826,
+       "elastic": 2826
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/isPartOf",
+     "termen": [
+      {
+       "waarde": "https://linkeddata.cultureelerfgoed.nl/rce/datacatalog/id/dataset/18c334d5-7fe9-3eb1-b389-99711495c1ce",
+       "sparql": 133000,
+       "elastic": 133000
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/alternateName",
+     "termen": [
+      {
+       "waarde": "schilderij",
+       "sparql": 12404,
+       "elastic": 12404
+      },
+      {
+       "waarde": "grafische kunst",
+       "sparql": 8170,
+       "elastic": 8170
+      },
+      {
+       "waarde": "affiche",
+       "sparql": 6249,
+       "elastic": 6249
+      },
+      {
+       "waarde": "bromide",
+       "sparql": 5098,
+       "elastic": 5098
+      },
+      {
+       "waarde": "pentekening",
+       "sparql": 4887,
+       "elastic": 4887
+      },
+      {
+       "waarde": "tekening",
+       "sparql": 3771,
+       "elastic": 3771
+      },
+      {
+       "waarde": "sculptuur",
+       "sparql": 3742,
+       "elastic": 3742
+      },
+      {
+       "waarde": "potloodtekening",
+       "sparql": 3209,
+       "elastic": 3209
+      },
+      {
+       "waarde": "krijttekening",
+       "sparql": 2972,
+       "elastic": 2972
+      },
+      {
+       "waarde": "ets",
+       "sparql": 2621,
+       "elastic": 2621
+      },
+      {
+       "waarde": "ontwerptekening",
+       "sparql": 2386,
+       "elastic": 2386
+      },
+      {
+       "waarde": "spotprent",
+       "sparql": 2383,
+       "elastic": 2383
+      },
+      {
+       "waarde": "vaas",
+       "sparql": 2232,
+       "elastic": 2232
+      },
+      {
+       "waarde": "gouache",
+       "sparql": 2057,
+       "elastic": 2057
+      },
+      {
+       "waarde": "stoel",
+       "sparql": 2052,
+       "elastic": 2052
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/sdPublisher",
+     "termen": [
+      {
+       "waarde": "Rijksdienst voor het Cultureel Erfgoed",
+       "sparql": 130475,
+       "elastic": 130475
+      },
+      {
+       "waarde": "---",
+       "sparql": 1169,
+       "elastic": 1169
+      },
+      {
+       "waarde": "Rijksmuseum",
+       "sparql": 665,
+       "elastic": 665
+      },
+      {
+       "waarde": "Nederlands Openluchtmuseum",
+       "sparql": 4,
+       "elastic": 4
+      },
+      {
+       "waarde": "Gevangenpoort",
+       "sparql": 3,
+       "elastic": 3
+      },
+      {
+       "waarde": "Het Koninklijk Penningkabinet",
+       "sparql": 1,
+       "elastic": 1
+      },
+      {
+       "waarde": "Van Gogh Museum",
+       "sparql": 1,
+       "elastic": 1
+      }
+     ],
+     "ok": true
+    },
+    {
+     "predicaat": "https://schema.org/temporal",
+     "termen": [
+      {
+       "waarde": "1940",
+       "sparql": 9452,
+       "elastic": 9452
+      },
+      {
+       "waarde": "1899",
+       "sparql": 3898,
+       "elastic": 3898
+      },
+      {
+       "waarde": "1980",
+       "sparql": 2904,
+       "elastic": 2904
+      },
+      {
+       "waarde": "1975",
+       "sparql": 2699,
+       "elastic": 2699
+      },
+      {
+       "waarde": "1981",
+       "sparql": 2632,
+       "elastic": 2632
+      },
+      {
+       "waarde": "1982",
+       "sparql": 2591,
+       "elastic": 2591
+      },
+      {
+       "waarde": "1977",
+       "sparql": 2371,
+       "elastic": 2371
+      },
+      {
+       "waarde": "1979",
+       "sparql": 2325,
+       "elastic": 2325
+      },
+      {
+       "waarde": "1976",
+       "sparql": 2238,
+       "elastic": 2238
+      },
+      {
+       "waarde": "1999",
+       "sparql": 2196,
+       "elastic": 2196
+      },
+      {
+       "waarde": "1978",
+       "sparql": 2131,
+       "elastic": 2131
+      },
+      {
+       "waarde": "1950",
+       "sparql": 2037,
+       "elastic": 2037
+      },
+      {
+       "waarde": "1974",
+       "sparql": 1963,
+       "elastic": 1963
+      },
+      {
+       "waarde": "1973",
+       "sparql": 1826,
+       "elastic": 1826
+      },
+      {
+       "waarde": "1972",
+       "sparql": 1759,
+       "elastic": 1759
+      }
+     ],
+     "ok": true
+    }
+   ],
+   "ok": true
+  }
+ }
+}

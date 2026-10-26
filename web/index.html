@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rijkscollectie SDO/Elastic demo</title>
+  <meta name="description" content="Zoek in de kunst- en cultuurhistorische objecten van de Rijkscollectie (RCE) via Linked Data en Elasticsearch.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#query">Direct naar zoeken</a>
+  <header class="site-header">
+    <div class="brand"><p><strong>Rijkscollectie SDO/Elastic demo</strong><br>Technische demonstrator op data van de RCE</p></div>
+    <nav class="bar" aria-label="Kruimelpad"><div class="wrap"><ol class="crumbs"><li>Demo</li><li aria-current="page">Rijkscollectie zoeken</li></ol></div></nav>
+  </header>
+  <main>
+  <div class="search-band"><div class="wrap">
+    <h1>Zoeken in de Rijkscollectie via Elasticsearch</h1>
+    <p class="intro">Ruim 133.000 kunstwerken en objecten uit de collectie van de Rijksdienst voor het Cultureel Erfgoed. Zoek op titel, objectnaam of beschrijving en filter op objectnaam, materiaal en genre.</p>
+    <form id="search-form" class="search-panel">
+      <div class="query-input"><label for="query">Jouw zoekvraag</label><input id="query" name="query" type="search" maxlength="500" autocomplete="off" placeholder="Bijvoorbeeld: koeien of molen AND winter" aria-describedby="syntax"></div>
+      <div><label for="field">Zoek in</label><select id="field" name="field"><option>Alles</option><option>Titel</option><option>Objectnaam</option><option>Beschrijving</option></select></div>
+      <div class="actions"><button type="submit" class="primary">Zoek</button><button type="button" id="reset" title="Wis zoekvraag, filters en resultaten">Opnieuw beginnen</button></div>
+      <p id="syntax" class="hint">Combineer met AND, OR, NOT (in hoofdletters) en haakjes. Gebruik quotes voor een exacte woordcombinatie, * voor een woorddeel en ~ voor tikfouten.</p>
+      <div class="examples"><span>Probeer:</span>
+        <button type="button" data-example="koeien">koeien</button>
+        <button type="button" data-example="molen AND winter">molen AND winter</button>
+        <button type="button" data-example='"stilleven met bloemen"'>"stilleven met bloemen"</button>
+        <button type="button" data-example="" data-filter="objectnaam=schilderij" data-img="1">Schilderijen met afbeelding</button>
+        <button type="button" data-example="portret*" data-filter="genre=https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/628fd943-c60e-3986-ab11-4fbe437ac35a">portret* in oude kunst</button>
+        <button type="button" data-example="vaas" data-filter="materiaal=https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/3ce11a17-56c4-3051-b77c-7addb60631b6">vaas van aardewerk</button>
+      </div>
+    </form>
+  </div></div>
+  <div class="wrap">
+    <div id="status" role="status" aria-live="polite">Laden…</div>
+    <div id="error" role="alert" hidden></div>
+    <div class="workspace" id="workspace">
+      <aside aria-label="Filters"><h2>Filters en facetten</h2><p class="hint">Vink meerdere waarden aan: binnen een filter geldt <em>of</em>, tussen filters <em>en</em>.</p>
+        <label class="facet-option toggle"><input type="checkbox" id="img-only"><span class="facet-name">Alleen met afbeelding</span></label>
+        <div id="facets"></div>
+      </aside>
+      <section id="results-panel" aria-labelledby="results-heading"><div class="results-title"><h2 id="results-heading">Resultaten</h2><span id="page-info"></span></div>
+        <div class="toolbar"><button type="button" id="share">Kopieer link</button></div>
+        <div id="active-filters"></div>
+        <ol id="results" class="grid"></ol>
+        <nav id="pagination" aria-label="Resultaatpagina’s" hidden><button id="previous" type="button">Vorige</button><span id="page-number"></span><button id="next" type="button">Volgende</button></nav>
+      </section>
+    </div>
+    <details class="technical"><summary>Toon Elasticsearch-query</summary>
+      <h2>JSON</h2><p>De request die naar de Elasticsearch-service is gestuurd (via de lokale proxy, die het TriplyDB-token toevoegt). Labels voor materialen, genres, makers en de afbeeldingen worden in een tweede request opgehaald met een <code>ids</code>-query.</p>
+      <pre id="query-json">Er is nog geen zoekactie uitgevoerd.</pre>
+      <h2>Weging in de JSON</h2><p>In <code>query_string.fields</code> staat achter de titel en de objectnaam <code>^3</code>: een treffer daarin telt 3× zo zwaar als een treffer in de beschrijving. Werken met een afbeelding krijgen een kleine extra score (<code>should</code> met <code>exists</code>), zodat ze bij gelijke relevantie eerst komen. Facetten (<code>aggs</code>) en filters (<code>post_filter</code>) gebruiken geen score.</p>
+    </details>
+  </div>
+  </main>
+
+  <dialog id="detail" aria-labelledby="detail-title">
+    <div class="help-head"><h2 id="detail-title">Object</h2><button type="button" id="detail-close" aria-label="Sluit">×</button></div>
+    <div id="detail-body"></div>
+  </dialog>
+
+  <footer class="site-footer"><div class="bar"><div class="wrap"><p><strong>Dit is een demo.</strong> Bouw hier geen applicaties of andere afhankelijkheden op. De scripts, index en service kunnen zonder aankondiging wijzigen of verdwijnen.</p></div></div>
+    <div class="wrap"><p>Deze demo gebruikt de interne dataset <code>rijkscollectie-rce</code> van de Rijksdienst voor het Cultureel Erfgoed (Elasticsearch-service <code>rijkscollectie-rce-elastic</code>). Afbeeldingen komen uit de RCE-beeldbank. Zie ook de <a href="https://erfgoed-sdo-elastic-demo.jolietjakeblues64.workers.dev/" target="_blank" rel="noopener noreferrer">Erfgoed SDO/Elastic demo</a> en de <a href="https://elastic-archeologie.jolietjakeblues64.workers.dev/" target="_blank" rel="noopener noreferrer">Archeologie SDO/Elastic demo</a>.</p></div></footer>
+</body>
+</html>

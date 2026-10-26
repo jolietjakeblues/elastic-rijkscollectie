@@ -1,0 +1,18 @@
+// Cloudflare Worker voor de Rijkscollectie SDO/Elastic demo.
+// Anders dan de andere demo's draait hier een Worker-script vóór de statische bestanden (run_worker_first):
+// Basic Auth voor de hele site, en een proxy naar de interne Elasticsearch-index die het TriplyDB-token toevoegt.
+// Secrets (niet in deze file): AUTH_USER, AUTH_PASS, TRIPLY_TOKEN. Zie README.
+{
+  "name": "rijkscollectie-elastic-demo",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-26",
+  "assets": {
+    "directory": "./web",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  // Deploy weigeren zolang deze secrets niet gezet zijn.
+  "secrets": {
+    "required": ["AUTH_USER", "AUTH_PASS", "TRIPLY_TOKEN"]
+  }
+}
