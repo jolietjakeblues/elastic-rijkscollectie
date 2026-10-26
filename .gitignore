@@ -1,1 +1,15 @@
-/.claude
+# Lokale secrets (wrangler dev); alleen het voorbeeld gaat mee
+.dev.vars*
+!.dev.vars.example
+.env*
+
+# Uitvoer van de consistentietest: bevat gegevens uit de interne dataset
+resultaten/
+
+# Editor/IDE config
+.claude/
+
+# Wrangler/Node/Python
+.wrangler/
+node_modules/
+__pycache__/

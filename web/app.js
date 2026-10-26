@@ -1,4 +1,5 @@
-// Rijkscollectie SDO/Elastic demo. Zoekt via de lokale proxy (/api/search), die het TriplyDB-token toevoegt.
+// Rijkscollectie SDO/Elastic demo. Zoekt via /api/search (online de Worker in src/worker.js, lokaal server.py),
+// die het TriplyDB-token toevoegt.
 // TriplyDB vervangt punten in veldnamen door spaties: schema.org/name heet hier "https://schema org/name".
 
 const TYPE = 'http://www w3 org/1999/02/22-rdf-syntax-ns#type';
@@ -155,7 +156,7 @@ async function run(urlMode = 'push') {
   } catch (error) {
     if (controller !== current || error.name === 'AbortError') return;
     $('status').textContent = 'Zoeken niet gelukt.';
-    $('error').textContent = error instanceof TypeError ? 'De lokale zoekserver is niet bereikbaar. Draait python server.py?' : error.message;
+    $('error').textContent = error instanceof TypeError ? 'De zoekservice is niet bereikbaar. Controleer je verbinding en probeer opnieuw.' : error.message;
     $('error').hidden = false;
     $('results').innerHTML = ''; renderFilters(null);
   } finally { if (controller === current) $('workspace').setAttribute('aria-busy', 'false'); }
