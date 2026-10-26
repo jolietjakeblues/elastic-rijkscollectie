@@ -29,6 +29,13 @@ a { color: var(--blauw); text-underline-offset: 3px; } a:hover { color: var(--bl
 .bar .wrap { width: 100%; }
 .crumbs { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; }
 .crumbs li + li::before { content: '›'; margin-right: 6px; }
+.bar-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.logout { color: #000; font-size: .9rem; } .logout:hover { color: #000; text-decoration-thickness: 2px; }
+
+/* Inlogpagina (door de Worker gemaakt, gebruikt deze stylesheet) */
+.login { display: grid; gap: 14px; max-width: 420px; margin-top: 8px; }
+.login #error { margin: 0; }
+.login .actions button { min-width: 140px; }
 
 /* Zoekband */
 .search-band { background: var(--grijs-1); padding: 28px 0 24px; }
@@ -50,7 +57,11 @@ label { display: block; font-weight: 700; margin-bottom: 4px; }
 
 /* Status */
 #status { margin: 24px 0 4px; font-weight: 700; }
-#error { padding: 14px 16px; border-left: 4px solid var(--rood); background: var(--rood-licht); margin: 12px 0 20px; }
+#error, .error-box { padding: 14px 16px; border-left: 4px solid var(--rood); background: var(--rood-licht); margin: 12px 0 20px; }
+
+/* Makerpagina: blok boven de resultaten (zelfde opmaak als het gebiedsblok in de Erfgoed-demo) */
+.context { padding: 12px 16px; margin: 8px 0 16px; border-left: 4px solid #000; background: var(--grijs-1); font-size: .9rem; }
+.context p { margin: 0 0 6px; } .context .links { margin: 0; } .context .links button { padding: 2px 10px; font-size: .85rem; }
 
 /* Werkruimte: filters | resultaten */
 .workspace { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 28px; align-items: start; margin-top: 16px; }
@@ -66,6 +77,12 @@ summary { cursor: pointer; font-weight: 700; }
 .facet-option input:checked ~ .facet-name { font-weight: 700; }
 .facet-filter { min-height: 38px; padding: 4px 8px; font-size: .85rem; margin-top: 8px; }
 .toggle { border-bottom: 1px solid var(--grijs-2); padding: 10px 2px; }
+.jaren { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-top: 10px; }
+.jaren label { font-size: .8rem; margin: 0; }
+.jaren input { min-height: 38px; padding: 4px 8px; font-size: .9rem; }
+.jaren button { padding: 6px 10px; font-size: .85rem; }
+#jaren-hint { margin: 6px 0 0; } #jaren-hint.invalid { color: var(--rood); }
+.metadata .link-button { font-size: inherit; text-align: left; }
 .results-title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 #page-info { font-size: .85rem; color: var(--grijs-6); }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .9rem; } .toolbar button { padding: 5px 12px; }
