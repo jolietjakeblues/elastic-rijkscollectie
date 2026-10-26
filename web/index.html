@@ -30,7 +30,7 @@
             aria-autocomplete="list" aria-expanded="false" aria-controls="trefwoord-lijst" aria-describedby="trefwoord-hint">
           <ul id="trefwoord-lijst" role="listbox" aria-labelledby="trefwoord-label" hidden></ul>
         </div>
-        <p id="trefwoord-hint" class="hint">Kies uit de 1.052 trefwoorden van de collectie. Een gekozen trefwoord werkt als filter en combineert met je zoekvraag en de andere filters. Kies je er meer, dan geldt <em>of</em>.</p>
+        <p id="trefwoord-hint" class="hint">Kies uit de ruim 1.000 trefwoorden van de collectie, met het aantal werken bij je huidige zoekvraag. Een gekozen trefwoord werkt als filter en combineert met je zoekvraag en de andere filters. Kies je er meer, dan geldt <em>of</em>.</p>
       </div>
       <div class="examples"><span>Probeer:</span>
         <button type="button" data-example="koeien">koeien</button>
@@ -65,6 +65,7 @@
       <pre id="query-json">Er is nog geen zoekactie uitgevoerd.</pre>
       <h2>Weging in de JSON</h2><p>In <code>query_string.fields</code> staat achter de titel en de objectnaam <code>^3</code>: een treffer daarin telt 3× zo zwaar als een treffer in de beschrijving. Werken met een afbeelding krijgen een kleine extra score (<code>should</code> met <code>exists</code>), zodat ze bij gelijke relevantie eerst komen. Facetten (<code>aggs</code>) en filters (<code>post_filter</code>) gebruiken geen score.</p>
       <h2>Makers</h2><p>Een werk verwijst naar een persoon (<code>schema:creator</code>), maar dezelfde kunstenaar heeft vaak meerdere persoonsrecords. Heeft een persoon precies één link naar RKDartists (<code>schema:sameAs</code>), dan voegt de demo die records samen op dat RKD-nummer. Anders op de naam. Personen met meerdere RKD-links (zoals “onbekend”) worden niet op RKD samengevoegd, want die links horen bij verschillende kunstenaars. Het makerfilter zoekt daarom eerst alle persoonsrecords van de gekozen maker op en filtert dan met <code>terms</code> op die IRI’s.</p>
+      <h2>Trefwoord</h2><p>De trefwoorden zijn de termen van <code>schema:additionalType</code>: onderwerpen (portret, politiek, bloemstilleven) en objectsoorten (vaas, stoel, prent) door elkaar, want de data maakt geen onderscheid. Een apart veld met onderwerpstrefwoorden (zoals <code>schema:about</code>) staat niet in de index. De lijst met termen wordt één keer geladen (<code>terms</code>-aggregatie plus de namen via een <code>ids</code>-query) en in de browser gefilterd. Het aantal werken per suggestie komt uit een <code>terms</code>-aggregatie met <code>include</code>, met de huidige zoekvraag en filters.</p>
       <h2>Periode</h2><p><code>schema:temporal</code> is tekst (<code>1923</code>, <code>1923-02</code>, <code>1975-05-11</code>). De periodes en het van/tot-filter gebruiken daarom <code>range</code> op het <code>.keyword</code>-veld: tekst sorteert hier net als het jaartal, zolang dat vier cijfers heeft. Jaartallen met minder cijfers vallen onder “vóór 1800”. Werken zonder datering vallen weg zodra je op periode filtert.</p>
     </details>
   </div>

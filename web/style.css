@@ -53,6 +53,22 @@ label { display: block; font-weight: 700; margin-bottom: 4px; }
 .hint, .muted { font-size: .85rem; line-height: 1.5; color: var(--grijs-6); }
 .search-panel .hint, .examples { grid-column: 1/-1; margin: 0; }
 .examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .85rem; } .examples button { padding: 2px 10px; font-size: .85rem; }
+.optional { font-weight: 400; color: var(--grijs-6); }
+
+/* Trefwoord met autoaanvullen (combobox) */
+.trefwoord { grid-column: 1/-1; max-width: 760px; }
+.trefwoord .hint { margin: 4px 0 0; }
+.combobox { position: relative; }
+#trefwoord-lijst { position: absolute; z-index: 20; top: 100%; left: 0; right: 0; list-style: none; margin: 0; padding: 0; max-height: 360px; overflow: auto;
+  background: #fff; border: 1px solid var(--grijs-5); border-top: 0; box-shadow: 0 4px 12px rgba(0, 0, 0, .15); }
+#trefwoord-lijst li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 14px; cursor: pointer; font-size: .95rem; }
+#trefwoord-lijst li:hover { background: var(--grijs-1); }
+#trefwoord-lijst li[aria-selected=true] { background: var(--blauw); color: #fff; }
+#trefwoord-lijst li[aria-selected=true] .facet-count { color: #fff; }
+#trefwoord-lijst li[aria-selected=true] mark { background: var(--geel); }
+#trefwoord-lijst li.zero { color: var(--grijs-6); }
+#trefwoord-lijst li.message { cursor: default; color: var(--grijs-6); }
+#trefwoord-lijst .facet-count { white-space: nowrap; font-size: .85rem; }
 .link-button { border: 0; padding: 0; background: none; color: var(--blauw); text-decoration: underline; text-underline-offset: 3px; font-size: inherit; } .link-button:hover:not(:disabled) { background: none; }
 
 /* Status */

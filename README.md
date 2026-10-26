@@ -2,7 +2,7 @@
 
 > **Dit is een demo.** Bouw hier geen applicaties of andere afhankelijkheden op. De scripts, index en service kunnen zonder aankondiging wijzigen of verdwijnen.
 
-Een zoekpagina op de Elasticsearch-service van de RCE-dataset `rijkscollectie-rce`: ruim 133.000 kunstwerken en objecten uit de Rijkscollectie. De pagina kan vrij zoeken op titel, objectnaam en beschrijving (met de `query_string`-syntax: AND, OR, NOT, quotes, `*`, `~`), heeft facetten voor maker, periode (met een van/tot-jaartalfilter), objectnaam, materiaal, genre en plaats, toont thumbnails uit de RCE-beeldbank en heeft een detailweergave met alle afbeeldingen, afmetingen en objectnummer. Een klik op een maker, genre, materiaal, plaats of objectnaam in het detail toont alle werken met die waarde. Bij één gekozen maker staat er een makerblok boven de resultaten met levensjaren, beroep of rol en een link naar RKDartists.
+Een zoekpagina op de Elasticsearch-service van de RCE-dataset `rijkscollectie-rce`: ruim 133.000 kunstwerken en objecten uit de Rijkscollectie. De pagina kan vrij zoeken op titel, objectnaam en beschrijving (met de `query_string`-syntax: AND, OR, NOT, quotes, `*`, `~`), heeft daaronder een tweede zoekbalk **Trefwoord** die automatisch aanvult uit de ruim 1.000 trefwoorden van de collectie, heeft facetten voor maker, periode (met een van/tot-jaartalfilter), objectnaam, materiaal, genre en plaats, toont thumbnails uit de RCE-beeldbank en heeft een detailweergave met alle afbeeldingen, afmetingen en objectnummer. Een klik op een maker, trefwoord, genre, materiaal, plaats of objectnaam in het detail toont alle werken met die waarde. Bij één gekozen maker staat er een makerblok boven de resultaten met levensjaren, beroep of rol en een link naar RKDartists.
 
 Zusterdemo's in dezelfde huisstijl: de [Erfgoed SDO/Elastic demo](https://erfgoed-sdo-elastic-demo.jolietjakeblues64.workers.dev/) en de [Archeologie SDO/Elastic demo](https://elastic-archeologie.jolietjakeblues64.workers.dev/).
 
@@ -149,6 +149,17 @@ Een werk verwijst met `schema:creator` naar een `Person`. Dezelfde kunstenaar he
 Het makerfilter zoekt eerst alle persoonsrecords van de gekozen maker op (maximaal 1.000) en filtert dan met `terms` op `creator.keyword`. Die lijst kan lang worden, dus hij staat één keer in de `query`, niet in `post_filter` en in elk facet. Het makerfacet telt via een `global`-aggregatie met dezelfde zoekvraag en de overige filters, zodat je meerdere makers tegelijk kunt kiezen. Het zoekveld in het makerfacet zoekt personen met `match_phrase_prefix` op de naam (achternaam eerst, bijv. *Gestel*) en telt hun werken bij de huidige zoekvraag.
 
 Facetaantallen per maker zijn opgeteld over de samengevoegde records. Een werk met twee records van dezelfde maker telt daardoor dubbel; dat komt zelden voor.
+
+### Trefwoord
+
+Er is geen apart veld met onderwerpstrefwoorden (geen `schema:about` of `schema:keywords`). Het veld dat er het dichtst bij komt is `schema:additionalType`: 1.052 termen bij 119.887 werken, met onderwerpen (portret, politiek, oorlog, bloemstilleven, Hildebrandmonument) en objectsoorten (vaas, stoel, prent, lithografie) door elkaar. Een term is een `DefinedTerm` met alleen een naam, zonder thesaurus of type, dus de demo kan onderwerpen en objectsoorten niet scheiden. Iconografische onderwerpen zoals "molen" komen als trefwoord niet voor; "beltmolen" staat alleen in de titel of beschrijving van 3 werken.
+
+De zoekbalk **Trefwoord** werkt zo:
+
+- Bij de eerste focus laadt hij alle termen één keer: een `terms`-aggregatie op `additionalType.keyword` plus de namen via een `ids`-query. Filteren gebeurt daarna in de browser, ook op een deel van een woord (*portret* vindt ook *mansportret* en *kinderportret*), zonder op accenten te letten.
+- Voor de beste 40 treffers telt een `terms`-aggregatie met `include` hoeveel werken elk trefwoord heeft binnen de huidige zoekvraag en filters. Hij toont er 12; trefwoorden zonder werken komen onderaan, grijs.
+- Bedienen kan met de pijltjestoetsen, Enter en Escape (WAI-ARIA-combobox) of met de muis.
+- Een gekozen trefwoord wordt een filter (`trefwoord=<IRI>` in de URL) en verschijnt als chip. Kies je er meer, dan geldt *of*, net als bij de facetten.
 
 ### Periode
 

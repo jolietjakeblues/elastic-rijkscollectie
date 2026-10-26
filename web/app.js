@@ -443,6 +443,134 @@ async function openDetail(id) {
   }
 }
 
+// ---------- trefwoorden ----------
+// Autoaanvullen op de termen van schema:additionalType (onderwerpen en objectsoorten door elkaar; de data maakt
+// geen onderscheid). De termen met hun namen worden één keer geladen en in de browser gefilterd. Het aantal werken
+// per suggestie bij de huidige zoekvraag en filters komt uit één kleine terms-aggregatie met include.
+
+const SUGGESTIONS = 12;
+const normalize = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+let termsLoaded = null; // Promise<[{ iri, name, norm }]>
+function loadTerms() {
+  termsLoaded ??= (async () => {
+    const r = await search({ size: 0, query: { term: { [TYPE + '.keyword']: 'https://schema.org/CreativeWork' } },
+      aggs: { t: { terms: { field: KW('additionalType'), size: 2000 } } } });
+    const iris = r.aggregations.t.buckets.map(b => b.key);
+    await resolve(iris);
+    return iris.map(iri => ({ iri, name: label(iri) })).filter(t => !isIri(t.name)).map(t => ({ ...t, norm: normalize(t.name) }));
+  })().catch(e => { termsLoaded = null; throw e; });
+  return termsLoaded;
+}
+
+// Rangorde: precies gelijk, begint ermee, een woord begint ermee, komt erin voor.
+function matchTerms(terms, text) {
+  const q = normalize(text.trim());
+  const rank = t => (t.norm === q ? 0 : t.norm.startsWith(q) ? 1 : t.norm.split(/[\s\-(/,]+/).some(w => w.startsWith(q)) ? 2 : t.norm.includes(q) ? 3 : -1);
+  return terms.map(t => ({ ...t, rank: rank(t) })).filter(t => t.rank >= 0 && !state.filters.trefwoord.includes(t.iri));
+}
+
+async function termCounts(iris) {
+  if (!lastParts) return null;
+  const { text, base, ff } = lastParts;
+  const r = await search({ size: 0, query: { bool: { must: [text], filter: [...base, ...(ff.maker ? [ff.maker] : []), ...othersOf(ff, 'trefwoord')] } },
+    aggs: { t: { terms: { field: KW('additionalType'), include: iris, size: iris.length } } } });
+  return new Map(r.aggregations.t.buckets.map(b => [b.key, b.doc_count]));
+}
+
+const combo = { items: [], active: -1, message: '', seq: 0, timer: null };
+
+function markMatch(name, text) {
+  const i = name.toLowerCase().indexOf(text.trim().toLowerCase());
+  if (i < 0 || !text.trim()) return esc(name);
+  const j = i + text.trim().length;
+  return `${esc(name.slice(0, i))}<mark>${esc(name.slice(i, j))}</mark>${esc(name.slice(j))}`;
+}
+
+function renderSuggestions() {
+  const list = $('trefwoord-lijst'), input = $('trefwoord');
+  const text = input.value;
+  list.innerHTML = combo.items.length
+    ? combo.items.map((x, i) => `<li role="option" id="tw-${i}" data-i="${i}" aria-selected="${i === combo.active}"${x.count === 0 ? ' class="zero"' : ''}>
+        <span>${markMatch(x.name, text)}</span><span class="facet-count">${x.count == null ? '' : `${format(x.count)} ${x.count === 1 ? 'werk' : 'werken'}`}</span></li>`).join('')
+    : combo.message ? `<li class="message" role="presentation">${esc(combo.message)}</li>` : '';
+  const open = !!list.innerHTML;
+  list.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
+  if (combo.active >= 0) {
+    input.setAttribute('aria-activedescendant', `tw-${combo.active}`);
+    $(`tw-${combo.active}`)?.scrollIntoView({ block: 'nearest' });
+  } else input.removeAttribute('aria-activedescendant');
+}
+
+function closeSuggestions() {
+  combo.seq++; combo.items = []; combo.message = ''; combo.active = -1;
+  renderSuggestions();
+}
+
+async function updateSuggestions() {
+  const text = $('trefwoord').value;
+  const my = ++combo.seq;
+  if (!text.trim()) { closeSuggestions(); return; }
+  let matches;
+  try {
+    matches = matchTerms(await loadTerms(), text);
+  } catch (e) {
+    if (my !== combo.seq) return;
+    combo.items = []; combo.message = e instanceof LoginError ? 'Je sessie is verlopen. Log opnieuw in.' : 'Trefwoorden laden is niet gelukt.';
+    renderSuggestions(); return;
+  }
+  if (my !== combo.seq) return;
+  if (!matches.length) {
+    combo.items = []; combo.active = -1; combo.message = `Geen trefwoord met “${text.trim()}”.`;
+    renderSuggestions(); return;
+  }
+  // Eerst de beste 40 op rangorde en naam, daarvan het aantal werken ophalen, dan de 12 beste tonen.
+  matches.sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'nl'));
+  const candidates = matches.slice(0, 40);
+  let counts = null;
+  try { counts = await termCounts(candidates.map(t => t.iri)); } catch { /* dan zonder aantallen */ }
+  if (my !== combo.seq) return;
+  combo.items = candidates.map(t => ({ ...t, count: counts ? counts.get(t.iri) ?? 0 : null }))
+    .sort((a, b) => (a.count === 0) - (b.count === 0) || a.rank - b.rank || (b.count ?? 0) - (a.count ?? 0) || a.name.localeCompare(b.name, 'nl'))
+    .slice(0, SUGGESTIONS);
+  combo.active = -1; combo.message = '';
+  renderSuggestions();
+}
+
+function chooseTerm(item) {
+  if (!state.filters.trefwoord.includes(item.iri)) state.filters.trefwoord = [...state.filters.trefwoord, item.iri];
+  $('trefwoord').value = '';
+  closeSuggestions();
+  state.page = 0; run();
+}
+
+$('trefwoord').addEventListener('focus', () => { loadTerms().catch(() => {}); });
+$('trefwoord').addEventListener('input', () => {
+  clearTimeout(combo.timer);
+  combo.timer = setTimeout(updateSuggestions, 120);
+});
+$('trefwoord').addEventListener('keydown', e => {
+  const n = combo.items.length;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (!n) { updateSuggestions(); return; }
+    combo.active = e.key === 'ArrowDown' ? (combo.active + 1) % n : (combo.active <= 0 ? n - 1 : combo.active - 1);
+    renderSuggestions();
+  } else if (e.key === 'Enter') {
+    e.preventDefault(); // nooit het zoekformulier versturen vanuit dit veld
+    if (n) chooseTerm(combo.items[Math.max(combo.active, 0)]);
+  } else if (e.key === 'Escape') {
+    if (!$('trefwoord-lijst').hidden) { e.preventDefault(); closeSuggestions(); } else $('trefwoord').value = '';
+  }
+});
+$('trefwoord').addEventListener('blur', () => { closeSuggestions(); });
+// mousedown niet laten doorgaan, anders verliest het veld de focus en sluit de lijst vóór de klik.
+$('trefwoord-lijst').addEventListener('mousedown', e => e.preventDefault());
+$('trefwoord-lijst').addEventListener('click', e => {
+  const li = e.target.closest('li[data-i]');
+  if (li) chooseTerm(combo.items[+li.dataset.i]);
+});
+
 // ---------- URL en formulier ----------
 
 function toParams() {
