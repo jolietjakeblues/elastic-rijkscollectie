@@ -6,6 +6,10 @@
   "name": "rijkscollectie-elastic-demo",
   "main": "src/worker.js",
   "compatibility_date": "2026-10-26",
+  // De demo draait op <naam>.<subdomein>.workers.dev.
+  "workers_dev": true,
+  // Geen aparte preview-URL per versie: één adres, minder om af te schermen.
+  "preview_urls": false,
   "assets": {
     "directory": "./web",
     "binding": "ASSETS",

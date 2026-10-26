@@ -19,7 +19,7 @@ from consistentietest import get_token
 
 ES_URL = "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/rijkscollectie-rce/services/rijkscollectie-rce-elastic/_search"
 WEB = Path(__file__).parent / "web"
-MAX_BODY = 64 * 1024
+MAX_BODY = 256 * 1024  # gelijk aan src/worker.js
 
 
 def read_security_headers():
@@ -34,6 +34,15 @@ SECURITY_HEADERS = read_security_headers()
 
 class Handler(SimpleHTTPRequestHandler):
     token = None
+
+    def do_GET(self):
+        # Lokaal is er geen inlog: /login en /logout (online door de Worker afgehandeld) gaan naar de zoekpagina.
+        if self.path.split("?")[0] in ("/login", "/logout"):
+            self.send_response(303)
+            self.send_header("Location", "/")
+            self.send_header("Content-Length", "0")
+            return self.end_headers()
+        super().do_GET()
 
     def do_POST(self):
         if self.path != "/api/search":

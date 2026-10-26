@@ -12,17 +12,26 @@
   <a class="skip" href="#query">Direct naar zoeken</a>
   <header class="site-header">
     <div class="brand"><p><strong>Rijkscollectie SDO/Elastic demo</strong><br>Technische demonstrator op data van de RCE</p></div>
-    <nav class="bar" aria-label="Kruimelpad"><div class="wrap"><ol class="crumbs"><li>Demo</li><li aria-current="page">Rijkscollectie zoeken</li></ol></div></nav>
+    <nav class="bar" aria-label="Kruimelpad"><div class="wrap bar-row"><ol class="crumbs"><li>Demo</li><li aria-current="page">Rijkscollectie zoeken</li></ol><a class="logout" href="/logout">Uitloggen</a></div></nav>
   </header>
   <main>
   <div class="search-band"><div class="wrap">
     <h1>Zoeken in de Rijkscollectie via Elasticsearch</h1>
-    <p class="intro">Ruim 133.000 kunstwerken en objecten uit de collectie van de Rijksdienst voor het Cultureel Erfgoed. Zoek op titel, objectnaam of beschrijving en filter op objectnaam, materiaal en genre.</p>
+    <p class="intro">Ruim 133.000 kunstwerken en objecten uit de collectie van de Rijksdienst voor het Cultureel Erfgoed. Zoek op titel, objectnaam of beschrijving en filter op maker, periode, objectnaam, materiaal, genre en plaats. Klik in een object op een maker voor alle werken van die maker.</p>
     <form id="search-form" class="search-panel">
       <div class="query-input"><label for="query">Jouw zoekvraag</label><input id="query" name="query" type="search" maxlength="500" autocomplete="off" placeholder="Bijvoorbeeld: koeien of molen AND winter" aria-describedby="syntax"></div>
       <div><label for="field">Zoek in</label><select id="field" name="field"><option>Alles</option><option>Titel</option><option>Objectnaam</option><option>Beschrijving</option></select></div>
       <div class="actions"><button type="submit" class="primary">Zoek</button><button type="button" id="reset" title="Wis zoekvraag, filters en resultaten">Opnieuw beginnen</button></div>
       <p id="syntax" class="hint">Combineer met AND, OR, NOT (in hoofdletters) en haakjes. Gebruik quotes voor een exacte woordcombinatie, * voor een woorddeel en ~ voor tikfouten.</p>
+      <div class="trefwoord">
+        <label for="trefwoord" id="trefwoord-label">Trefwoord <span class="optional">(onderwerp of objectsoort)</span></label>
+        <div class="combobox">
+          <input id="trefwoord" type="text" role="combobox" autocomplete="off" spellcheck="false" placeholder="Begin te typen, bijvoorbeeld portret, oorlog of vaas"
+            aria-autocomplete="list" aria-expanded="false" aria-controls="trefwoord-lijst" aria-describedby="trefwoord-hint">
+          <ul id="trefwoord-lijst" role="listbox" aria-labelledby="trefwoord-label" hidden></ul>
+        </div>
+        <p id="trefwoord-hint" class="hint">Kies uit de 1.052 trefwoorden van de collectie. Een gekozen trefwoord werkt als filter en combineert met je zoekvraag en de andere filters. Kies je er meer, dan geldt <em>of</em>.</p>
+      </div>
       <div class="examples"><span>Probeer:</span>
         <button type="button" data-example="koeien">koeien</button>
         <button type="button" data-example="molen AND winter">molen AND winter</button>
@@ -30,12 +39,15 @@
         <button type="button" data-example="" data-filter="objectnaam=schilderij" data-img="1">Schilderijen met afbeelding</button>
         <button type="button" data-example="portret*" data-filter="genre=https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/definedterm/628fd943-c60e-3986-ab11-4fbe437ac35a">portret* in oude kunst</button>
         <button type="button" data-example="vaas" data-filter="materiaal=https://linkeddata.cultureelerfgoed.nl/rce/rijkscollectie-rce/id/product/3ce11a17-56c4-3051-b77c-7addb60631b6">vaas van aardewerk</button>
+        <button type="button" data-example="" data-filter="maker=rkd:https://rkd.nl/artists/31221">Alle werken van Leo Gestel</button>
+        <button type="button" data-example="molen" data-filter="periode=2">molen in 1800–1899</button>
       </div>
     </form>
   </div></div>
   <div class="wrap">
     <div id="status" role="status" aria-live="polite">Laden…</div>
     <div id="error" role="alert" hidden></div>
+    <div id="context" class="context" hidden></div>
     <div class="workspace" id="workspace">
       <aside aria-label="Filters"><h2>Filters en facetten</h2><p class="hint">Vink meerdere waarden aan: binnen een filter geldt <em>of</em>, tussen filters <em>en</em>.</p>
         <label class="facet-option toggle"><input type="checkbox" id="img-only"><span class="facet-name">Alleen met afbeelding</span></label>
@@ -52,6 +64,8 @@
       <h2>JSON</h2><p>De request die naar de Elasticsearch-service is gestuurd (via <code>/api/search</code>: online de Cloudflare Worker, lokaal <code>server.py</code>; die voegt het TriplyDB-token toe). Labels voor materialen, genres, makers en de afbeeldingen worden in een tweede request opgehaald met een <code>ids</code>-query.</p>
       <pre id="query-json">Er is nog geen zoekactie uitgevoerd.</pre>
       <h2>Weging in de JSON</h2><p>In <code>query_string.fields</code> staat achter de titel en de objectnaam <code>^3</code>: een treffer daarin telt 3× zo zwaar als een treffer in de beschrijving. Werken met een afbeelding krijgen een kleine extra score (<code>should</code> met <code>exists</code>), zodat ze bij gelijke relevantie eerst komen. Facetten (<code>aggs</code>) en filters (<code>post_filter</code>) gebruiken geen score.</p>
+      <h2>Makers</h2><p>Een werk verwijst naar een persoon (<code>schema:creator</code>), maar dezelfde kunstenaar heeft vaak meerdere persoonsrecords. Heeft een persoon precies één link naar RKDartists (<code>schema:sameAs</code>), dan voegt de demo die records samen op dat RKD-nummer. Anders op de naam. Personen met meerdere RKD-links (zoals “onbekend”) worden niet op RKD samengevoegd, want die links horen bij verschillende kunstenaars. Het makerfilter zoekt daarom eerst alle persoonsrecords van de gekozen maker op en filtert dan met <code>terms</code> op die IRI’s.</p>
+      <h2>Periode</h2><p><code>schema:temporal</code> is tekst (<code>1923</code>, <code>1923-02</code>, <code>1975-05-11</code>). De periodes en het van/tot-filter gebruiken daarom <code>range</code> op het <code>.keyword</code>-veld: tekst sorteert hier net als het jaartal, zolang dat vier cijfers heeft. Jaartallen met minder cijfers vallen onder “vóór 1800”. Werken zonder datering vallen weg zodra je op periode filtert.</p>
     </details>
   </div>
   </main>
